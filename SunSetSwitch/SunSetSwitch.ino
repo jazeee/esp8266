@@ -4,6 +4,7 @@
 #include <ESP8266mDNS.h>
 #include <time.h>
 #include "./time-utils.h"
+#include "./index.h"
 #include "/home/jsingh/private/wireless.h"
 
 #define IP_ADDRESS_SUFFIX 200
@@ -17,7 +18,7 @@ const int led = 13;
 
 void handleRoot() {
   digitalWrite(led, 1);
-  server.send(200, "text/plain", "Hello, jaz from esp8266!");
+  server.send(200, "text/html", getIndexHtml());
   digitalWrite(led, 0);
 }
 
