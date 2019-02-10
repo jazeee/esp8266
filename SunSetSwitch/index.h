@@ -1,5 +1,4 @@
-String getBody() {
-	return "\
+const String BODY = "\
 <nav class='light-blue lighten-1' role='navigation'>\n\
   <div class='nav-wrapper container'><a id='logo-container' href='#' class='brand-logo'>Sun Set Switch</a>\n\
     <ul class='right hide-on-med-and-down'>\n\
@@ -42,10 +41,8 @@ String getBody() {
   </div>\n\
 </div>\n\
 ";
-}
 
-String getScripts() {
-	return "\
+const String SCRIPTS = "\
 <script>\n\
   function toggleSwitch() {\n\
     fetch(\"/toggle-relay\", {method: 'POST'}).then(response=>response.text())\n\
@@ -62,10 +59,9 @@ String getScripts() {
     });\n\
   }\n\
 </script>\n\
-	";
-}
-String getIndexHtml() {
-	return String(
+";
+
+const String INDEX_HTML = 
 "<!DOCTYPE html>\n"
 "<html>\n\
   <head>\n\
@@ -80,13 +76,12 @@ String getIndexHtml() {
   </head>\n\
 \n\
   <body>\n" +
-  getBody() +
+  BODY +
   "\n" + 
-  getScripts() + "\
+  SCRIPTS + "\
     <!--JavaScript at end of body for optimized loading-->\n\
     <!-- Compiled and minified JavaScript -->\n\
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>	\n\
   </body>\n\
 </html>\n\
-	");
-}
+";

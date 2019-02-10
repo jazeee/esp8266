@@ -7,22 +7,18 @@
 #include "./index.h"
 #include "/home/jsingh/private/wireless.h"
 
-#define IP_ADDRESS_SUFFIX 200
+//#define IP_ADDRESS_SUFFIX 208
 
 const char* ssid = PRIVATE_SSID;
 const char* password = PRIVATE_PSK;
 
 ESP8266WebServer server(80);
 
-const int led = 13;
-
 void handleRoot() {
-  digitalWrite(led, 1);
-  server.send(200, "text/html", getIndexHtml());
-  digitalWrite(led, 0);
+  server.send(200, "text/html", INDEX_HTML);
 }
 
-const int relay = 4;
+const int relay = 0;
 const int invertRelayLogic = 1;
 bool relayState = false;
 const String setRelayState(bool newRelayState) {
@@ -39,6 +35,14 @@ void toggleRelay() {
 	const String output = setRelayState(!relayState);
   server.send(200, "text/plain", output);
 }
+void turnRelayOn() {
+	const String output = setRelayState(true);
+  server.send(200, "text/plain", output);
+}
+void turnRelayOff() {
+	const String output = setRelayState(false);
+  server.send(200, "text/plain", output);
+}
 
 void getTime() {
   time_t now = time(nullptr);
@@ -50,7 +54,6 @@ void getSunSetTime() {
 }
 
 void handleNotFound() {
-  digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -63,24 +66,21 @@ void handleNotFound() {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
 }
 
 void setup(void) {
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
   pinMode(relay, OUTPUT);
   setRelayState(false);
 
-  Serial.begin(115200 * 2);
+  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
-  IPAddress ip(10, 2, 1, IP_ADDRESS_SUFFIX);
-	IPAddress gateway(10, 2, 1, 1);
-	IPAddress subnet(255, 255, 255, 0);
-	IPAddress dns(10, 2, 1, 1);
-
-	// Static IP Setup Info Here...
-	WiFi.config(ip, dns, gateway, subnet);
+  #ifdef IP_ADDRESS_SUFFIX
+	  IPAddress ip(10, 2, 1, IP_ADDRESS_SUFFIX);
+		IPAddress gateway(10, 2, 1, 1);
+		IPAddress subnet(255, 255, 255, 0);
+		IPAddress dns(10, 2, 1, 1);
+		WiFi.config(ip, dns, gateway, subnet);
+	#endif
   WiFi.begin(ssid, password);
   Serial.println("");
 
@@ -103,6 +103,8 @@ void setup(void) {
   server.on("/time", getTime);
   server.on("/time/sun-set", getSunSetTime);
   server.on("/toggle-relay", toggleRelay);
+  server.on("/relay/on", turnRelayOn);
+  server.on("/relay/off", turnRelayOff);
 
   server.onNotFound(handleNotFound);
 
@@ -122,7 +124,7 @@ void processSunSet() {
   bool nextSunSetTransition = false;
 	double minutesFromMidnight = (tmInfo -> tm_hour * 60.0 + tmInfo -> tm_min);
   double sunSetMinutesFromNow = getSunSetMinutesFromNow();
-	if (sunSetMinutesFromNow < 0 && minutesFromMidnight < 22 * 60) {
+	if (sunSetMinutesFromNow < 30 && minutesFromMidnight < 22 * 60) {
 		nextSunSetTransition = true;
 	}
 	if (lastSunSetTransition != nextSunSetTransition) {
