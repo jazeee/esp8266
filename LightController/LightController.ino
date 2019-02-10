@@ -170,7 +170,7 @@ void probeForSwitches(bool state) {
   for ( int i = 0; i < SWITCH_COUNT ; i++ ){
   	bool isPressed = digitalRead(SWITCH_INPUTS[i]) == 0;
   	if (isPressed) {
-  		if (currentMillis - SWITCH_REQUEST_IN_MS[i] < 2000) {
+  		if (currentMillis - SWITCH_REQUEST_IN_MS[i] < 1000) {
   			continue;
   		}
   		SWITCH_REQUEST_IN_MS[i] = currentMillis;
