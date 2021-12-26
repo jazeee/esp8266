@@ -7,7 +7,7 @@
 #include "./index.h"
 #include "/home/jsingh/private/wireless.h"
 
-//#define IP_ADDRESS_SUFFIX 208
+// #define IP_ADDRESS_SUFFIX 204
 
 const char* ssid = PRIVATE_SSID;
 const char* password = PRIVATE_PSK;
