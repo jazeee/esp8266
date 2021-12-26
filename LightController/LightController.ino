@@ -17,8 +17,8 @@ const int SWITCH_1_DI = 4;
 const int SWITCH_2_DI = 0;
 const int SWITCH_3_DI = 2;
 const int SWITCH_4_DI = 14;
-const int SWITCH_5_DI = 12;
-const int SWITCH_6_DI = 13;
+const int SWITCH_5_DI = 13;
+const int SWITCH_6_DI = 12;
 const int SWITCH_INPUTS[] = {
 	SWITCH_1_DI,
 	SWITCH_2_DI,
